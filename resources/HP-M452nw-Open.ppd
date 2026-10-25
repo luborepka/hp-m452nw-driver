@@ -1,0 +1,61 @@
+*PPD-Adobe: "4.3"
+*% SPDX-License-Identifier: MIT
+*% Copyright (c) 2026 Lubos Repka
+*FormatVersion: "4.3"
+*FileVersion: "0.1.0"
+*LanguageVersion: English
+*LanguageEncoding: ISOLatin1
+*PCFileName: "HPM452NW.PPD"
+*Manufacturer: "HP"
+*Product: "(HP Color LaserJet M452nw)"
+*ModelName: "HP Color LaserJet M452nw Open Print"
+*ShortNickName: "HP M452nw Open"
+*NickName: "HP Color LaserJet M452nw - Open Print PDF"
+*PSVersion: "(3010.000) 0"
+*LanguageLevel: "3"
+*ColorDevice: True
+*DefaultColorSpace: RGB
+*FileSystem: False
+*Throughput: "27"
+*LandscapeOrientation: Plus90
+*TTRasterizer: Type42
+*FreeVM: "64000000"
+*cupsVersion: 1.1
+*cupsManualCopies: False
+*cupsFilter: "application/vnd.cups-pdf 0 -"
+*% PDF is interpreted by the printer, using macOS's built-in PDF filter.
+*% The loopback IPP driver implements these duplex choices in software.
+*OpenUI *Duplex/Two-Sided Printing (Manual Reload): PickOne
+*OrderDependency: 20 AnySetup *Duplex
+*DefaultDuplex: None
+*Duplex None/Off: "<</Duplex false>>setpagedevice"
+*Duplex DuplexNoTumble/Long Edge - Reload Tray 1: "<</Duplex true /Tumble false>>setpagedevice"
+*Duplex DuplexTumble/Short Edge - Reload Tray 1: "<</Duplex true /Tumble true>>setpagedevice"
+*CloseUI: *Duplex
+*OpenUI *PageSize/Paper Size: PickOne
+*OrderDependency: 10 AnySetup *PageSize
+*DefaultPageSize: A4
+*PageSize A4/A4: "<</PageSize[595.276 841.890]>>setpagedevice"
+*PageSize Letter/US Letter: "<</PageSize[612 792]>>setpagedevice"
+*CloseUI: *PageSize
+*OpenUI *PageRegion/Paper Region: PickOne
+*OrderDependency: 10 AnySetup *PageRegion
+*DefaultPageRegion: A4
+*PageRegion A4/A4: "<</PageSize[595.276 841.890]>>setpagedevice"
+*PageRegion Letter/US Letter: "<</PageSize[612 792]>>setpagedevice"
+*CloseUI: *PageRegion
+*DefaultImageableArea: A4
+*ImageableArea A4: "12 12 583.276 829.890"
+*ImageableArea Letter: "12 12 600 780"
+*DefaultPaperDimension: A4
+*PaperDimension A4: "595.276 841.890"
+*PaperDimension Letter: "612 792"
+*OpenUI *ColorModel/Color Mode: PickOne
+*OrderDependency: 20 AnySetup *ColorModel
+*DefaultColorModel: RGB
+*ColorModel RGB/Color: "<</cupsColorSpace 1 /cupsColorOrder 0 /cupsBitsPerColor 8>>setpagedevice"
+*ColorModel Gray/Black and White: "<</cupsColorSpace 0 /cupsColorOrder 0 /cupsBitsPerColor 8>>setpagedevice"
+*CloseUI: *ColorModel
+*DefaultResolution: 600dpi
+*DefaultFont: Courier
+*Font Courier: Standard "(001.007)" Standard ROM

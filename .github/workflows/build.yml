@@ -1,0 +1,65 @@
+name: Build and test
+"on":
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15
+            arch: arm64
+          - runner: macos-15-intel
+            arch: x86_64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    env:
+      ARCH: ${{ matrix.arch }}
+      PYTHONPYCACHEPREFIX: ${{ github.workspace }}/build/python-cache
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.release.tag_name || github.ref }}
+      - run: bash scripts/build.sh
+      - name: Test PDFs, recovery and native IPP transport
+        run: |
+          build/hp-open-print-tests --self-test
+          python3 -m unittest discover -s Tests -v
+      - run: bash scripts/package.sh
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name || '' }}
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: driver-${{ matrix.arch }}
+          path: build/release/*
+          if-no-files-found: error
+          retention-days: 7
+
+  release:
+    if: github.event_name == 'release'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          pattern: driver-*
+          path: dist
+          merge-multiple: true
+      - name: Publish tested prebuilt downloads
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          cd dist
+          sha256sum *.pkg > SHA256SUMS
+          gh release upload "$TAG" *.pkg SHA256SUMS --clobber

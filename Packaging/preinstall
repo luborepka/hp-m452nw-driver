@@ -1,0 +1,15 @@
+#!/bin/bash
+set -euo pipefail
+# The distribution enables only Apple's current-user installation domain.
+[[ $(/usr/bin/id -u) != 0 ]] || { echo 'Install for the signed-in user, not the whole system.' >&2; exit 1; }
+driver_home=$(/usr/bin/dscl . -read "/Users/$(/usr/bin/id -un)" NFSHomeDirectory)
+driver_home=${driver_home#NFSHomeDirectory: }
+jobs="$driver_home/Library/Application Support/HP Open Print/Jobs"
+[[ -d "$jobs" ]] || exit 0
+/usr/bin/find "$jobs" -type f -name record.json -print0 | while IFS= read -r -d '' record; do
+  state=$(/usr/bin/plutil -extract state raw -o - "$record")
+  case "$state" in
+    7|8|9) ;;
+    *) echo 'Finish or cancel the current print job before changing the driver.' >&2; exit 1 ;;
+  esac
+done

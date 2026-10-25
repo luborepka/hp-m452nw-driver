@@ -1,0 +1,12 @@
+#!/bin/bash
+set -euo pipefail
+operation=install
+driver_home=$(/usr/bin/dscl . -read "/Users/$(/usr/bin/id -un)" NFSHomeDirectory)
+driver_home=${driver_home#NFSHomeDirectory: }
+app="$driver_home/Library/Application Support/HP Open Print/Driver/HP M452nw Driver.app"
+if [[ "$operation" == remove ]]; then
+  [[ ! -d "$app" ]] || "$app/Contents/MacOS/hp-open-print" --uninstall
+else
+  # Launch as an application so macOS can present Local Network permission.
+  /usr/bin/open -n "$app" --args --configure
+fi
